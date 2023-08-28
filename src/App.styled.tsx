@@ -46,6 +46,7 @@ const SCApp = styled.div`
     line-height: 25px;
   }
 
+  background: var(--midnight-green);
   display: flex;
   flex-direction: column;
 `;

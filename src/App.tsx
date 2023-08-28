@@ -5,20 +5,24 @@ import About from "./pages/About/About";
 import Contact from "./pages/Contact/Contact";
 import Navbar from "./components/Navbar/Navbar";
 import Footer from "./components/Footer/Footer";
+import NotFound from "./components/NotFound/NotFound";
 
 function App() {
   return (
     <SCApp>
       <Navbar />
       <Switch>
-        <Route>
+        <Route path="/fem_my_team/">
           <Home />
         </Route>
-        <Route>
+        <Route path="/fem_my_team/about">
           <About />
         </Route>
-        <Route>
+        <Route path="/fem_my_team/contact">
           <Contact />
+        </Route>
+        <Route>
+          <NotFound />
         </Route>
       </Switch>
       <Footer />
