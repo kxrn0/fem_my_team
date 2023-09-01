@@ -12,8 +12,8 @@ export default function SellingPoint({ Icon, title, message }: Props) {
     <SCSellingPoint>
       <Icon />
       <div className="body">
-        <h3>{title}</h3>
-        <p>{message}</p>
+        <h3 className="fs-h3">{title}</h3>
+        <p className="fs-body-2">{message}</p>
       </div>
     </SCSellingPoint>
   );

@@ -15,3 +15,8 @@
   font-family: livvic-semi-bold;
   src: url("./assets/fonts/Livvic-SemiBold.ttf");
 }
+
+@font-face {
+  font-family: livvic-medium-italic;
+  src: url("./assets/fonts/Livvic-MediumItalic.ttf");
+}
