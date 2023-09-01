@@ -5,40 +5,63 @@ const SCForm = styled.form`
   flex-direction: column;
   gap: 24px;
 
-  input[type="text"],
-  input[type="email"],
-  textarea {
-    color: var(--white);
-    background: transparent;
-    width: 540px;
-    border: none;
-    border-bottom: 1px solid var(--white);
+  label {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
 
-    &:focus {
-      outline: none;
-      border-bottom: 1px solid var(--rapture-blue);
-    }
-
-    &::placeholder {
+    input[type="text"],
+    input[type="email"],
+    textarea {
       color: var(--white);
-      opacity: 0.6;
+      background: transparent;
+      width: 540px;
+      border: none;
+      border-bottom: 1px solid var(--white);
+
+      &:focus {
+        outline: none;
+        border-bottom: 1px solid var(--rapture-blue);
+      }
+
+      &::placeholder {
+        color: var(--white);
+        opacity: 0.6;
+      }
+
+      &.invalid {
+        border-bottom: 1px solid var(--light-coral);
+
+        &::placeholder {
+          color: var(--light-coral);
+        }
+      }
+
+      @media screen and (max-width: 750px) {
+        width: 60vw;
+      }
+
+      @media screen and (max-width: 650px) {
+        width: 325px;
+      }
     }
-  }
 
-  input[type="text"],
-  input[type="email"] {
-    padding-bottom: 17px;
-  }
+    input[type="text"],
+    input[type="email"] {
+      padding-bottom: 17px;
+    }
 
-  textarea {
-    padding-bottom: 40px;
-  }
+    textarea {
+      padding-bottom: 40px;
+    }
 
-  .error {
-    display: none;
+    .error {
+      color: var(--light-coral);
+      display: none;
 
-    &.active {
-      display: block;
+      &.active {
+        display: block;
+      }
     }
   }
 `;

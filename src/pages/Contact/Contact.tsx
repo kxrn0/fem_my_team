@@ -24,7 +24,7 @@ export default function Contact() {
       <SoyTen />
       <div className="hero">
         <div className="intro">
-          <h1 className="fs-h1-small">Contact</h1>
+          <h1 className="fs-h1-small reduced">Contact</h1>
           <h2 className="fs-h2-small">Ask us about</h2>
         </div>
         <ul className="topic-list">

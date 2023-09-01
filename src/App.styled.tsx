@@ -96,6 +96,11 @@ const SCApp = styled.div`
     line-height: 18px;
   }
 
+  .fs-body-5 {
+    font-size: 10px;
+    font-family: livvic-bold-italic;
+  }
+
   .link-primary {
     color: var(--white);
     text-decoration: none;

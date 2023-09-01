@@ -5,6 +5,8 @@ const SCContact = styled.div`
   display: flex;
   justify-content: center;
   gap: 130px;
+  padding: 50px 165px;
+  padding-bottom: 130px;
   position: relative;
   overflow: hidden;
 
@@ -25,12 +27,29 @@ const SCContact = styled.div`
       h2 {
         color: var(--light-coral);
       }
+
+      @media screen and (max-width: 1350px) {
+        text-align: center;
+        gap: 25px;
+      }
+
+      @media screen and (max-width: 650px) {
+        gap: 15px;
+      }
     }
 
     .topic-list {
       display: flex;
       flex-direction: column;
       gap: 10px;
+    }
+
+    @media screen and (max-width: 1350px) {
+      gap: 25px;
+    }
+
+    @media screen and (max-width: 650px) {
+      gap: 40px;
     }
   }
 
@@ -41,13 +60,33 @@ const SCContact = styled.div`
       top: 0;
       left: 0;
       transform: translate(-50%);
+
+      @media screen and (max-width: 650px) {
+        display: none;
+      }
     }
 
     &:last-of-type {
       bottom: 0;
       right: 0;
       transform: translate(50%);
+
+      @media screen and (max-width: 650px) {
+        transform: translate(50%, 50%);
+      }
     }
+  }
+
+  @media screen and (max-width: 1350px) {
+    flex-direction: column;
+    align-items: center;
+    padding: 50px 0 110px 0;
+    gap: 65px;
+  }
+
+  @media screen and (max-width: 650px) {
+    padding: 90px 25px;
+    gap: 55px;
   }
 `;
 

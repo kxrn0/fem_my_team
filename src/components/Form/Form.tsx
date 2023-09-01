@@ -1,7 +1,7 @@
 import { FormEvent, useState } from "react";
-import SCForm from "./Form.styled.jsx";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import SCForm from "./Form.styled.jsx";
 
 export default function Form() {
   const [noName, setNoName] = useState(false);
@@ -9,6 +9,7 @@ export default function Form() {
   const [noCompany, setNoCompany] = useState(false);
   const [noTitle, setNoTitle] = useState(false);
   const [noMessage, setNoMessage] = useState(false);
+  const [isSending, setIsSending] = useState(false);
 
   async function send(
     name: string,
@@ -48,12 +49,16 @@ export default function Form() {
       return;
     }
 
+    setIsSending(true);
+
     try {
       await send(name, email, company, title, message);
 
       toast.success("Message delivered! we'll get back to you shortly!");
+      setIsSending(false);
     } catch (error) {
       toast.error("Something went wrong! check your connection and try again!");
+      setIsSending(false);
     }
   }
 
@@ -64,30 +69,34 @@ export default function Form() {
           type="text"
           name="name"
           placeholder="Name"
-          className="fs-body-2"
+          className={`fs-body-2 ${noName && "invalid"}`}
           onChange={() => setNoName(false)}
         />
-        <p className={`error ${noName && "active"}`}>This field is required</p>
+        <p className={`error fs-body-5 ${noName && "active"}`}>
+          This field is required
+        </p>
       </label>
       <label>
         <input
           type="email"
           name="email"
           placeholder="Email Address"
-          className="fs-body-2"
+          className={`fs-body-2 ${noEmail && "invalid"}`}
           onChange={() => setNoEmail(false)}
         />
-        <p className={`error ${noEmail && "active"}`}>This field is required</p>
+        <p className={`error fs-body-5 ${noEmail && "active"}`}>
+          This field is required
+        </p>
       </label>
       <label>
         <input
           type="text"
           name="company"
           placeholder="Company Name"
-          className="fs-body-2"
+          className={`fs-body-2 ${noCompany && "invalid"}`}
           onChange={() => setNoCompany(false)}
         />
-        <p className={`error ${noCompany && "active"}`}>
+        <p className={`error fs-body-5 ${noCompany && "active"}`}>
           This field is required
         </p>
       </label>
@@ -96,23 +105,27 @@ export default function Form() {
           type="text"
           name="title"
           placeholder="Title"
-          className="fs-body-2"
+          className={`fs-body-2 ${noTitle && "invalid"}`}
           onChange={() => setNoTitle(false)}
         />
-        <p className={`error ${noTitle && "active"}`}>This field is required</p>
+        <p className={`error fs-body-5 ${noTitle && "active"}`}>
+          This field is required
+        </p>
       </label>
       <label>
         <textarea
           name="message"
           placeholder="Message"
-          className="fs-body-2"
+          className={`fs-body-2 ${noMessage && "invalid"}`}
           onChange={() => setNoMessage(false)}
         ></textarea>
-        <p className={`error ${noMessage && "active"}`}>
+        <p className={`error fs-body-5 ${noMessage && "active"}`}>
           This field is required
         </p>
       </label>
-      <button className="button-secondary fs-body-1">submit</button>
+      <button className="button-secondary fs-body-1" disabled={isSending}>
+        submit
+      </button>
       <ToastContainer position="top-center" />
     </SCForm>
   );
