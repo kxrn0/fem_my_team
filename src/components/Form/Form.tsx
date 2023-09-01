@@ -1,5 +1,7 @@
 import { FormEvent, useState } from "react";
 import SCForm from "./Form.styled.jsx";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 export default function Form() {
   const [noName, setNoName] = useState(false);
@@ -48,9 +50,10 @@ export default function Form() {
 
     try {
       await send(name, email, company, title, message);
+
+      toast.success("Message delivered! we'll get back to you shortly!");
     } catch (error) {
-      console.log("error on the handler!");
-      console.log(error);
+      toast.error("Something went wrong! check your connection and try again!");
     }
   }
 
@@ -110,6 +113,7 @@ export default function Form() {
         </p>
       </label>
       <button className="button-secondary fs-body-1">submit</button>
+      <ToastContainer position="top-center" />
     </SCForm>
   );
 }
