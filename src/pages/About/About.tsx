@@ -163,7 +163,7 @@ export default function About() {
       <section className="directors">
         <SoyEight />
         <SoyFour />
-        <h2 className="directors-title fs-h2 reduced">Meet the directors</h2>
+        <h2 className="directors-title fs-h2-large reduced">Meet the directors</h2>
         <ul className="director-list">
           {directors.map((dir, index) => (
             <li key={index}>
@@ -174,7 +174,7 @@ export default function About() {
       </section>
       <section className="clients">
         <SoyNine />
-        <h2 className="clients-title fs-h2 reduced">Some of our clients</h2>
+        <h2 className="clients-title fs-h2-large reduced">Some of our clients</h2>
         <div className="client-list">
           {clients.map((client, index) => (
             <img key={index} src={client.image} alt={client.name} />
