@@ -3,33 +3,16 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import SCForm from "./Form.styled.jsx";
 
-type FormDataType = {
-  name: string;
-  email: string;
-  company: string;
-  title: string;
-  message: string;
-};
-
-type ErrorType = {
-  name: boolean;
-  email: boolean;
-  company: boolean;
-  title: boolean;
-  message: boolean;
-};
-
 export default function Form() {
   const [isSending, setIsSending] = useState(false);
-
-  const [formData, setFormData] = useState<FormDataType>({
+  const [formData, setFormData] = useState<Record<string, string>>({
     name: "",
     email: "",
     company: "",
     title: "",
     message: "",
   });
-  const [errors, setErrors] = useState<ErrorType>({
+  const [errors, setErrors] = useState<Record<string, boolean>>({
     name: false,
     email: false,
     company: false,
@@ -52,34 +35,21 @@ export default function Form() {
   async function handle_submission(event: FormEvent) {
     event.preventDefault();
 
-    const data: FormDataType = {
-      name: "",
-      email: "",
-      company: "",
-      title: "",
-      message: "",
-    };
-    for (let key in formData) {
-      const trimmed = formData[key as keyof FormDataType].trim();
+    const data: Record<string, string> = {};
+    let hasEmpty;
 
-      data[key as keyof FormDataType] = trimmed;
+    hasEmpty = false;
+
+    for (const [key, value] of Object.entries(formData)) {
+      data[key] = value.trim();
+      hasEmpty ||= !data[key];
     }
 
-    if (Object.keys(data).some((key) => !data[key as keyof FormDataType])) {
-      const errors: ErrorType = {
-        name: false,
-        email: false,
-        company: false,
-        title: false,
-        message: false,
-      };
-
-      Object.keys(data).forEach(
-        (key) =>
-          (errors[key as keyof FormDataType] = !data[key as keyof FormDataType])
+    if (hasEmpty) {
+      setErrors(
+        Object.fromEntries(Object.entries(data).map(([k, v]) => [k, !v]))
       );
 
-      setErrors(errors);
       return;
     }
 
@@ -89,19 +59,10 @@ export default function Form() {
       await send(data);
 
       toast.success("Message delivered! we'll get back to you shortly!");
-      setFormData((prev) => {
-        const obj: FormDataType = {
-          name: "",
-          email: "",
-          company: "",
-          title: "",
-          message: "",
-        };
 
-        for (let key in prev) obj[key as keyof FormDataType] = "";
-
-        return obj;
-      });
+      setFormData((prev) =>
+        Object.fromEntries(Object.keys(prev).map((key) => [key, ""]))
+      );
     } catch (error) {
       toast.error("Something went wrong! check your connection and try again!");
     } finally {
