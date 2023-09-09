@@ -1,27 +1,47 @@
-import { FormEvent, useState } from "react";
+import { ChangeEvent, FormEvent, useState } from "react";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import SCForm from "./Form.styled.jsx";
 
+type FormDataType = {
+  name: string;
+  email: string;
+  company: string;
+  title: string;
+  message: string;
+};
+
+type ErrorType = {
+  name: boolean;
+  email: boolean;
+  company: boolean;
+  title: boolean;
+  message: boolean;
+};
+
 export default function Form() {
-  const [noName, setNoName] = useState(false);
-  const [noEmail, setNoEmail] = useState(false);
-  const [noCompany, setNoCompany] = useState(false);
-  const [noTitle, setNoTitle] = useState(false);
-  const [noMessage, setNoMessage] = useState(false);
   const [isSending, setIsSending] = useState(false);
 
-  async function send(
-    name: string,
-    email: string,
-    company: string,
-    title: string,
-    message: string
-  ) {
+  const [formData, setFormData] = useState<FormDataType>({
+    name: "",
+    email: "",
+    company: "",
+    title: "",
+    message: "",
+  });
+  const [errors, setErrors] = useState<ErrorType>({
+    name: false,
+    email: false,
+    company: false,
+    title: false,
+    message: false,
+  });
+
+  async function send(data: Record<string, string>) {
     try {
       await fetch("https://jsonplaceholder.typicode.com/posts", {
         method: "POST",
-        body: JSON.stringify({ name, email, company, title, message }),
+        body: JSON.stringify(data),
         headers: { "Content-Type": "application/json; charset=UTF-8" },
       });
     } catch (error) {
@@ -29,37 +49,71 @@ export default function Form() {
     }
   }
 
-  async function handle_submission(event: FormEvent<HTMLFormElement>) {
+  async function handle_submission(event: FormEvent) {
     event.preventDefault();
 
-    const form = event.target as HTMLFormElement;
-    const name = (form["name"] as any).value.trim(); //fuck typescript
-    const email = form["email"].value.trim();
-    const company = form["company"].value.trim();
-    const title = (form["title"] as any).value.trim(); //fuck typescript
-    const message = form["message"].value.trim();
+    const data: FormDataType = {
+      name: "",
+      email: "",
+      company: "",
+      title: "",
+      message: "",
+    };
+    for (let key in formData) {
+      const trimmed = formData[key as keyof FormDataType].trim();
 
-    if (!name || !email || !company || !title || !message) {
-      if (!name) setNoName(true);
-      if (!email) setNoEmail(true);
-      if (!company) setNoCompany(true);
-      if (!title) setNoTitle(true);
-      if (!message) setNoMessage(true);
+      data[key as keyof FormDataType] = trimmed;
+    }
 
+    if (Object.keys(data).some((key) => !data[key as keyof FormDataType])) {
+      const errors: ErrorType = {
+        name: false,
+        email: false,
+        company: false,
+        title: false,
+        message: false,
+      };
+
+      Object.keys(data).forEach(
+        (key) =>
+          (errors[key as keyof FormDataType] = !data[key as keyof FormDataType])
+      );
+
+      setErrors(errors);
       return;
     }
 
     setIsSending(true);
 
     try {
-      await send(name, email, company, title, message);
+      await send(data);
 
       toast.success("Message delivered! we'll get back to you shortly!");
-      setIsSending(false);
+      setFormData((prev) => {
+        const obj: FormDataType = {
+          name: "",
+          email: "",
+          company: "",
+          title: "",
+          message: "",
+        };
+
+        for (let key in prev) obj[key as keyof FormDataType] = "";
+
+        return obj;
+      });
     } catch (error) {
       toast.error("Something went wrong! check your connection and try again!");
+    } finally {
       setIsSending(false);
     }
+  }
+
+  function handle_change(event: ChangeEvent) {
+    const { name, value } = event.target as HTMLInputElement;
+
+    setFormData((prev) => ({ ...prev, [name]: value }));
+    setErrors((prev) => ({ ...prev, [name]: false }));
   }
 
   return (
@@ -69,10 +123,11 @@ export default function Form() {
           type="text"
           name="name"
           placeholder="Name"
-          className={`fs-body-2 ${noName && "invalid"}`}
-          onChange={() => setNoName(false)}
+          className={`fs-body-2 ${errors.name && "invalid"}`}
+          value={formData.name}
+          onChange={handle_change}
         />
-        <p className={`error fs-body-5 ${noName && "active"}`}>
+        <p className={`error fs-body-5 ${errors.name && "active"}`}>
           This field is required
         </p>
       </label>
@@ -81,10 +136,11 @@ export default function Form() {
           type="email"
           name="email"
           placeholder="Email Address"
-          className={`fs-body-2 ${noEmail && "invalid"}`}
-          onChange={() => setNoEmail(false)}
+          className={`fs-body-2 ${errors.email && "invalid"}`}
+          value={formData.email}
+          onChange={handle_change}
         />
-        <p className={`error fs-body-5 ${noEmail && "active"}`}>
+        <p className={`error fs-body-5 ${errors.email && "active"}`}>
           This field is required
         </p>
       </label>
@@ -93,10 +149,11 @@ export default function Form() {
           type="text"
           name="company"
           placeholder="Company Name"
-          className={`fs-body-2 ${noCompany && "invalid"}`}
-          onChange={() => setNoCompany(false)}
+          className={`fs-body-2 ${errors.company && "invalid"}`}
+          value={formData.company}
+          onChange={handle_change}
         />
-        <p className={`error fs-body-5 ${noCompany && "active"}`}>
+        <p className={`error fs-body-5 ${errors.company && "active"}`}>
           This field is required
         </p>
       </label>
@@ -105,10 +162,11 @@ export default function Form() {
           type="text"
           name="title"
           placeholder="Title"
-          className={`fs-body-2 ${noTitle && "invalid"}`}
-          onChange={() => setNoTitle(false)}
+          className={`fs-body-2 ${errors.title && "invalid"}`}
+          value={formData.title}
+          onChange={handle_change}
         />
-        <p className={`error fs-body-5 ${noTitle && "active"}`}>
+        <p className={`error fs-body-5 ${errors.title && "active"}`}>
           This field is required
         </p>
       </label>
@@ -116,10 +174,11 @@ export default function Form() {
         <textarea
           name="message"
           placeholder="Message"
-          className={`fs-body-2 ${noMessage && "invalid"}`}
-          onChange={() => setNoMessage(false)}
+          className={`fs-body-2 ${errors.message && "invalid"}`}
+          value={formData.message}
+          onChange={handle_change}
         ></textarea>
-        <p className={`error fs-body-5 ${noMessage && "active"}`}>
+        <p className={`error fs-body-5 ${errors.message && "active"}`}>
           This field is required
         </p>
       </label>
